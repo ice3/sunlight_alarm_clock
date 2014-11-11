@@ -15,6 +15,10 @@ void setup() {
   pinMode(GREENPIN, OUTPUT);
   pinMode(BLUEPIN, OUTPUT);
 
+  analogWrite(REDPIN,   0);
+  analogWrite(BLUEPIN,  0);
+  analogWrite(GREENPIN, 0);
+
   Serial.begin(9600);
 }
  
