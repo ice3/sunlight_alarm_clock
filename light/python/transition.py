@@ -62,7 +62,7 @@ transition2 = {"orig": color2_hsl, "end": color3_hsl, "dur": 100}
 transition3 = {"orig": color3_hsl, "end": color4_hsl, "dur": 100}
 transition4 = {"orig": color4_hsl, "end": color5_hsl, "dur": 100}
 
-sleep_time = 1
+sleep_time = 0.1
 
 def main():
     for t in range(1, transition1["dur"]+1):
