@@ -2,7 +2,7 @@
 #define GREENPIN 6
 #define BLUEPIN 3
  
-#define SLEEP_TIME 200.0     // make this higher to slow down
+#define SLEEP_TIME 1000.0     // make this higher to slow down
 
 #define DUR_TRANS1 100.0
 #define DUR_TRANS2 100.0
@@ -27,7 +27,7 @@ void setup() {
   analogWrite(BLUEPIN,  0);
   analogWrite(GREENPIN, 0);
 
-  Serial.begin(9600);
+  // Serial.begin(9600);
 }
 
 Color valInterm(Color col1, Color col2, float pos)
@@ -37,17 +37,17 @@ Color valInterm(Color col1, Color col2, float pos)
     // we have to decide if we go clock wise or counter clowk wise.
     // inspired from here : http://stackoverflow.com/questions/2593832
 
-	Serial.print("pos : ");
-	Serial.println(pos);
-    // Serial.println("col1 : ");
-    // Serial.println(col1.red);
-    // Serial.println(col1.green);
-    // Serial.println(col1.blue);
+	// Serial.print("pos : ");
+	// Serial.println(pos);
+    // // Serial.println("col1 : ");
+    // // Serial.println(col1.red);
+    // // Serial.println(col1.green);
+    // // Serial.println(col1.blue);
 
-    // Serial.println("col2 : ");
-    // Serial.println(col2.red);
-    // Serial.println(col2.green);
-    // Serial.println(col2.blue);
+    // // Serial.println("col2 : ");
+    // // Serial.println(col2.red);
+    // // Serial.println(col2.green);
+    // // Serial.println(col2.blue);
 
     double hsl1 [3];
     double hsl2 [3];
@@ -80,27 +80,27 @@ Color valInterm(Color col1, Color col2, float pos)
     res_l = abs(hsl2[2]-hsl1[2])*pos + hsl1[2];
     res_s = abs(hsl2[1]-hsl1[1])*pos + hsl1[1];
 
-	// Serial.println("Res hsl : ");
- //    Serial.println(res_h);
-	// Serial.println(res_s);
-	// Serial.println(res_l);
+	// // Serial.println("Res hsl : ");
+ //    // Serial.println(res_h);
+	// // Serial.println(res_s);
+	// // Serial.println(res_l);
 
     Color col = Color::hslToRgb(res_h, res_s, res_l);
 
-    // Serial.println("res col interm : ");
-    // Serial.println(col.red);
-    // Serial.println(col.green);
-    // Serial.println(col.blue);
-
+    // // Serial.println("res col interm : ");
+    // // Serial.println(col.red);
+    // // Serial.println(col.green);
+    // // Serial.println(col.blue);
+    // Serial.println();
     return col;
 }
 
 Color correction(Color col)
 {
-	// Serial.println("col avant correction");
- //    Serial.println(col.red);
- //    Serial.println(col.green);
- //    Serial.println(col.blue);
+  // // Serial.println("col avant correction");
+  //    // Serial.println(col.red);
+  //    // Serial.println(col.green);
+  //    // Serial.println(col.blue);
 
 	double cor[3] = {255.0/255.0, 212.0/255.0, 212.0/255.0};
 	byte r = (int)round((col.red*1.0)*cor[0]);
@@ -112,6 +112,9 @@ Color correction(Color col)
 
 void setLedColor(Color col)
 {
+    // Serial.print("pin red : "); // Serial.println(col.red);
+    // Serial.print("pin blue : "); // Serial.println(col.blue);
+    // Serial.print("pin green : "); // Serial.println(col.green);
     analogWrite(REDPIN,   col.red);
     analogWrite(BLUEPIN,  col.blue);
     analogWrite(GREENPIN, col.green);	
@@ -124,6 +127,33 @@ void loop()
     	Color res = valInterm(col1, col2, t*1.0/DUR_TRANS1);
      	res = correction(res);
      	setLedColor(res);
-      	delay(SLEEP_TIME * 2);
+      delay(SLEEP_TIME * 2);
 	}
+
+  for(int t=1 ; t < (DUR_TRANS1 + 1) ; ++t)
+  {
+      Color res = valInterm(col2, col3, t*1.0/DUR_TRANS1);
+      res = correction(res);
+      setLedColor(res);
+      delay(SLEEP_TIME * 1);
+  }
+
+  for(int t=1 ; t < (DUR_TRANS1 + 1) ; ++t)
+  {
+      Color res = valInterm(col3, col4, t*1.0/DUR_TRANS1);
+      res = correction(res);
+      setLedColor(res);
+      delay(SLEEP_TIME * 1);
+  }
+  
+  for(int t=1 ; t < (DUR_TRANS1 + 1) ; ++t)
+  {
+      Color res = valInterm(col4, col5, t*1.0/DUR_TRANS1);
+      res = correction(res);
+      setLedColor(res);
+      delay(SLEEP_TIME * 1);
+  }
+
+  while (1)
+    setLedColor(correction(col5));
 }

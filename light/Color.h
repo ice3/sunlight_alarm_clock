@@ -22,7 +22,6 @@ class Color
     Color(byte r, byte g, byte b);
     void set_color(byte r, byte g, byte b);
     void set_color_hsb(byte h, byte s, byte b);
-    int color_16();
     
     void rgbToHsl(double hsl[]);
     static Color hslToRgb(double h, double s, double l);

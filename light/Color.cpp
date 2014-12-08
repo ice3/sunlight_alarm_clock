@@ -19,15 +19,6 @@ void Color::set_color(byte r, byte g, byte b){
   blue = b;
 }
 
-int Color::color_16()
-{
-  int cur_r = red >> 3 ;
-  int cur_g = green >> 2 ;
-  int cur_b = blue >> 3 ;
-  my_color = cur_r  | (cur_g << 5) | (cur_b << 11); 
-  return my_color;
-}
-
 
 void Color::rgbToHsl( double hsl[]) {
   double rd = (double) red/255;
@@ -45,18 +36,11 @@ void Color::rgbToHsl( double hsl[]) {
     double d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     if (max == rd) 
-    {
       h = (gd - bd) / d + (gd < bd ? 6 : 0);
-    } 
     else if (max == gd) 
-    {
       h = (bd - rd) / d + 2;
-    } 
     else if (max == bd) 
-    {
-      h = (rd - gd) / d + 4;
-    }
-    
+      h = (rd - gd) / d + 4;    
     h /= 6;
   }
   hsl[0] = h;
@@ -79,44 +63,35 @@ void Color::rgbToHsl( double hsl[]) {
 Color Color::hslToRgb(double h, double s, double l) 
 {
   double r, g, b;
-  Serial.println("hslToRgb");
-  Serial.println(h);
-  Serial.println(s);
-  Serial.println(l);
   
   if (s == 0) 
-  {
     r = g = b = l; // achromatic
-  } 
   else 
   {
     double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     double p = 2 * l - q;
-    r = Color::hue2rgb(p, q, h + 1/3);
+    r = Color::hue2rgb(p, q, h + 1.0/3.0);
     g = Color::hue2rgb(p, q, h);
-    b = Color::hue2rgb(p, q, h - 1/3);
+    b = Color::hue2rgb(p, q, h - 1.0/3.0);
   }
 
   byte res_r = (byte)floor(r * 255);
   byte res_g = (byte)floor(g * 255);
   byte res_b = (byte)floor(b * 255);
 
-  Serial.println("hslToRgb");
-  Serial.println(r);
-  Serial.println(g);
-  Serial.println(b);
   return Color(res_r, res_g, res_b);
 }
 
 double Color::hue2rgb(double p, double q, double t) 
 {
+  // Serial.print("p : "); // Serial.println(p);
+  // Serial.print("q : "); // Serial.println(q);
+  // Serial.print("t : "); // Serial.println(t);
   if(t < 0) t += 1;
   if(t > 1) t -= 1;
-  if(t < 1/6) return p + (q - p) * 6 * t;
-  if(t < 1/2) return q;
-  if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-  Serial.print("  p : ");
-  Serial.println(p);
+  if(t < 1.0/6.0) return p + (q - p) * 6 * t;
+  if(t < 1.0/2.0) return q;
+  if(t < 2.0/3.0) return p + (q - p) * (2.0/3.0 - t) * 6;
   return p;
 }
 
