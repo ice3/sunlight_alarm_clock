@@ -141,7 +141,7 @@ void loop()
   t = rtc.getTime();
   Serial.println(t.min);
   Serial.println(t.hour);
-  if (!((t.min == 30) && (t.hour == 18)))
+  if (!((t.min == 40) && (t.hour == 7)))
   {
     delay(500);
     return;
