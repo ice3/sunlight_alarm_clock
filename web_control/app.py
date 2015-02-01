@@ -48,7 +48,11 @@ def test_disconnect():
 def time_change(message):
     hour, minute = message["data"].split(":")
     print("New wake up time: {}-{}".format(hour, minute))
-    cron  = CronTab(tabfile="test.CronTab")
+    TEST = True
+    if TEST:
+        cron = CronTab(tabfile="test.CronTab")
+    else:
+        cron = CronTab(user=True)
 
     # get already created crontab
     for job in cron.find_comment("clock weekday"):
@@ -62,9 +66,10 @@ def time_change(message):
             job.hour.on(hour)
             job.minute.on(minute)
             schedule = job.schedule(date_from=datetime.now())
-            import IPython; IPython.embed()
-            cron.write("test.CronTab")
-
+            if TEST:
+                cron.write("test.CronTab")
+            else:
+                cron.write()
 
 @socketio.on('disconnect request', namespace='/test')
 def disconnect_request():
