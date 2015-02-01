@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Réglage réveil</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    
+
+
+
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            namespace = '/test'; // change to an empty string to use the global namespace
+            var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+            socket.on('connect', 
+                function() {
+                    socket.emit('onConnect');
+                }
+            );
+
+            var input = $('.clockpicker').clockpicker(
+                {
+                    // placement: 'bottom',
+                    // align: 'center',
+                    donetext: 'Done',
+                    afterDone: function() {
+                        socket.emit('onChangeTime', {data: $("#time").val()});
+                    }
+                }
+            );
+
+        });
+    </script>
+</head>
+<body>
+    <link type="text/css" href="http://weareoutman.github.io/clockpicker/dist/bootstrap-clockpicker.min.css" rel="stylesheet">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <h1>Réglage réveil</h1>
+
+    <p> A quelle heure la lumière doit commencer à s'allumer ?</p>
+    <div class="input-group clockpicker" style="width:40px;">
+        <input type="text" id="time" align="center" value="09:30">
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-time"></span>
+        </span>
+    </div>
+
+</body>
+</html>
+
+
+
