@@ -26,7 +26,6 @@ void setup() {
 void loop() {
   int r, g, b;
   String content = "";
-  char j_c, r_c, g_c, b_c;
 
     while (Serial.available() > 0)
     {
@@ -57,6 +56,7 @@ void loop() {
             analogWrite(GREENPIN, g);
             inData = ""; // Clear recieved buffer
         }
+        Serial.println("lol");
     }
 
 }
